@@ -11,7 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class CommentaireController extends Controller
 {
     public function store(CreateCommentaireRequest $request, Profil $profil)
-    {
+    {   
+        if ($profil->administrateur_id !== Auth::user()->Administrateur->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+        
         $validatedData = $request->validated();
 
         $commentaire = new Commentaire([
